@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "O'Reilly EPUB Downloader - Enhanced",
+  "version": "2.0.0",
+  "description": "Download O'Reilly books as EPUB with advanced features and optimized performance",
+  "author": "sh4d0w0x01 (Enhanced) | security-log (Original)",
+  
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+
+  "permissions": [
+    "downloads",
+    "storage",
+    "notifications"
+  ],
+
+  "host_permissions": [
+    "https://learning.oreilly.com/*",
+    "https://*.oreilly.com/*"
+  ],
+
+  "background": {
+    "scripts": [
+      "lib/jszip.min.js",
+      "logger.js",
+      "utils.js",
+      "cache.js",
+      "pool.js",
+      "download.js",
+      "notification.js",
+      "background.js"
+    ]
+  },
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_title": "O'Reilly EPUB Downloader"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://learning.oreilly.com/library/view/*"
+      ],
+      "js": [
+        "logger.js",
+        "utils.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/jszip.min.js"],
+      "matches": ["https://learning.oreilly.com/*"]
+    }
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "oreilly-epub-downloader@enhanced",
+      "strict_min_version": "115.0"
+    }
+  }
+}

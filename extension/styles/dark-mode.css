@@ -1,0 +1,108 @@
+/* Dark mode theme - automatically applied based on system preference */
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #e0e0e0;
+    background: #1e1e1e;
+  }
+
+  .container {
+    background: #2d2d2d;
+  }
+
+  header {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  }
+
+  #status-message {
+    color: #b0b0b0;
+  }
+
+  #book-info {
+    background: #353535;
+    border-left-color: #667eea;
+  }
+
+  #book-title {
+    color: #e0e0e0;
+  }
+
+  #book-metadata {
+    color: #b0b0b0;
+  }
+
+  .secondary-btn {
+    background: #2d2d2d;
+    color: #667eea;
+    border-color: #667eea;
+  }
+
+  .secondary-btn:hover {
+    background: #353535;
+  }
+
+  .text-btn {
+    color: #707070;
+  }
+
+  .text-btn:hover {
+    color: #ff6b6b;
+  }
+
+  .progress-container {
+    background: #3a3a3a;
+  }
+
+  #progress-text {
+    color: #b0b0b0;
+  }
+
+  .error {
+    color: #ff6b6b;
+    background: #3a1f1f;
+    border-left-color: #ff6b6b;
+  }
+
+  .success {
+    color: #51cf66;
+    background: #1f3a1f;
+    border-left-color: #51cf66;
+  }
+
+  .warning {
+    color: #ffa500;
+    background: #3a2f1f;
+    border-left-color: #ffa500;
+  }
+
+  .warning summary {
+    color: #ffb74d;
+  }
+
+  .cache-info {
+    background: #1f2a3a;
+    border-left-color: #667eea;
+    color: #667eea;
+  }
+
+  footer {
+    background: #252525;
+    border-top-color: #3a3a3a;
+  }
+
+  .info {
+    color: #707070;
+  }
+
+  #history-list li {
+    border-bottom-color: #353535;
+  }
+
+  #history-list .history-title {
+    color: #e0e0e0;
+  }
+
+  #history-list .history-date {
+    color: #707070;
+  }
+}

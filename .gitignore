@@ -1,0 +1,47 @@
+# Build artifacts
+dist/
+build/
+*.zip
+*.xpi
+
+# Extension packaging
+web-ext-artifacts/
+
+# User data
+*.db
+*.db-shm
+*.db-wal
+cookies.json
+
+# Downloads
+Books/
+downloads/
+*.epub
+
+# Logs
+*.log
+logs/
+
+# Temp files
+tmp/
+*.tmp
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
