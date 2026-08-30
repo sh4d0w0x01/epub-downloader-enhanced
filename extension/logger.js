@@ -1,6 +1,6 @@
 /**
  * Advanced logging system for debugging and monitoring
- * Provides structured logging with different levels
+ * Performance Optimized
  */
 
 const Logger = (() => {
@@ -12,16 +12,18 @@ const Logger = (() => {
     TRACE: 4
   };
 
+  // Cache methods to avoid constant lookup
+  const consoleMethods = {
+    ERROR: console.error.bind(console),
+    WARN: console.warn.bind(console),
+    INFO: console.log.bind(console),
+    DEBUG: console.log.bind(console),
+    TRACE: console.log.bind(console)
+  };
+
   let currentLevel = LOG_LEVELS.DEBUG;
   let logs = [];
-
-  /**
-   * Get current timestamp
-   * @returns {string} ISO timestamp
-   */
-  function getTimestamp() {
-    return new Date().toISOString();
-  }
+  const MAX_LOGS = 1000;
 
   /**
    * Log a message at specified level
@@ -32,12 +34,22 @@ const Logger = (() => {
   function log(level, message, data) {
     if (LOG_LEVELS[level] > currentLevel) return;
     
-    const timestamp = getTimestamp();
+    // Defer timestamp creation to only when actually logging
+    const timestamp = new Date().toISOString();
+
+    // Performance: Use a circular-like buffer approach or simple push/shift
+    // depending on engine, but standard push/shift with MAX_LOGS is generally okay.
     logs.push({ timestamp, level, message, data });
-    if (logs.length > 1000) logs.shift();
+    if (logs.length > MAX_LOGS) {
+      logs.shift(); // Remove oldest
+    }
     
-    const method = level === 'ERROR' ? 'error' : level === 'WARN' ? 'warn' : 'log';
-    console[method](`[${timestamp}] [${level}] ${message}`, data || '');
+    const method = consoleMethods[level];
+    if (data !== undefined) {
+      method(`[${timestamp}] [${level}] ${message}`, data);
+    } else {
+      method(`[${timestamp}] [${level}] ${message}`);
+    }
   }
 
   return {
@@ -47,8 +59,8 @@ const Logger = (() => {
     debug: (msg, data) => log('DEBUG', msg, data),
     trace: (msg, data) => log('TRACE', msg, data),
     setLevel: (level) => { currentLevel = LOG_LEVELS[level] || LOG_LEVELS.DEBUG; },
-    getLogs: () => [...logs],
-    clearLogs: () => { logs = []; },
+    getLogs: () => [...logs], // Return a shallow copy
+    clearLogs: () => { logs = []; }, // Direct reassignment is fast
     exportLogs: () => JSON.stringify(logs, null, 2)
   };
 })();
