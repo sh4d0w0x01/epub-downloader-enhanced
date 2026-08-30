@@ -1,8 +1,12 @@
 /**
- * Utility functions for common operations
+ * Utility functions for common operations (Performance Optimized)
  */
 
 const Utils = (() => {
+  // Pre-calculate natural logarithm of 1024 for formatBytes
+  const LN1024 = Math.log(1024);
+  const SIZES = ['Bytes', 'KB', 'MB', 'GB'];
+
   /**
    * Format bytes to human-readable format
    * @param {number} bytes - Number of bytes
@@ -10,10 +14,11 @@ const Utils = (() => {
    */
   function formatBytes(bytes) {
     if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+    const i = Math.floor(Math.log(bytes) / LN1024);
+    // Use bitwise shift for power of 1024 to avoid Math.pow overhead
+    // (Note: works safely up to 1024^3 (GB) within JS safe integer limits)
+    const divisor = i === 0 ? 1 : (1 << (i * 10));
+    return Math.round((bytes / divisor) * 100) / 100 + ' ' + SIZES[i];
   }
 
   /**
@@ -22,9 +27,9 @@ const Utils = (() => {
    * @returns {string} Formatted duration
    */
   function formatDuration(seconds) {
-    if (seconds < 60) return Math.round(seconds) + 's';
-    if (seconds < 3600) return Math.round(seconds / 60) + 'm';
-    return Math.round(seconds / 3600) + 'h';
+    if (seconds < 60) return (seconds | 0) + 's';
+    if (seconds < 3600) return ((seconds / 60) | 0) + 'm';
+    return ((seconds / 3600) | 0) + 'h';
   }
 
   /**

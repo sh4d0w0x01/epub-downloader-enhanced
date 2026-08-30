@@ -4,6 +4,13 @@
  */
 
 const NotificationManager = (() => {
+  // Cache the browser API check
+  const hasBrowserAPI = typeof browser !== 'undefined' && browser.notifications;
+  const hasChromeAPI = typeof chrome !== 'undefined' && chrome.notifications;
+
+  // Pick the available API for performance, avoiding repeated checks
+  const notifyAPI = hasBrowserAPI ? browser.notifications : (hasChromeAPI ? chrome.notifications : null);
+
   /**
    * Show a browser notification
    * @param {string} title - Notification title
@@ -12,15 +19,21 @@ const NotificationManager = (() => {
    * @param {string} options.iconUrl - Icon URL
    */
   async function notify(title, options = {}) {
+    if (!notifyAPI) return; // Fail fast if no API
+
     try {
-      await browser.notifications.create({
+      await notifyAPI.create({
         type: 'basic',
         title: title,
         message: options.message || '',
         iconUrl: options.iconUrl || 'icons/icon-128.png'
       });
     } catch (error) {
-      Logger?.warn?.('Notification failed:', error);
+      if (typeof Logger !== 'undefined' && Logger.warn) {
+        Logger.warn('Notification failed:', error);
+      } else {
+        console.warn('Notification failed:', error);
+      }
     }
   }
 
